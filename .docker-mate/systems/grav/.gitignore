@@ -1,0 +1,28 @@
+# Composer
+web/.composer
+web/vendor/*
+!**/vendor/
+
+# Sass
+.sass-cache
+
+
+# Grav Specific
+web/backup/*
+web/cache/*
+web/assets/*
+web/logs/*
+web/images/*
+web/user/accounts/*
+web/user/data/*
+web/user/localhost/config/security.yaml
+web/user/config/security.yaml
+
+!**/.gitkeep
+
+# testing stuff
+web/tests/_output/*
+web/tests/_support/_generated/*
+web/tests/cache/*
+web/tests/error.log
+web/system/templates/testing/*

@@ -1,0 +1,93 @@
+version: '3.7'
+services:
+  #######################################
+  # Application
+  #######################################
+  app:
+    build:
+      context: .docker-mate/docker/app
+      args:
+        tag: $PHP_VERSION
+        container: php-dev
+    depends_on:
+      - db
+      - mail
+    links:
+      - db
+      - mail
+    volumes:
+      - ./app:/var/www/html/
+    environment:
+      - php.session.save_path=/var/tmp
+      - PHP_DISMOD=ioncube
+      - POSTFIX_RELAYHOST=mail:1025
+      # Avoid cli error output
+      - php.xdebug.remote_enable=
+      - php.xdebug.remote_connect_back=
+      - php.xdebug.profiler_output_dir=
+    env_file:
+      - .docker-mate/docker/app/.env
+
+  #######################################
+  # Webserver
+  #######################################
+  web:
+    image: nginx:mainline
+    depends_on:
+      - app
+    links:
+      - app
+    volumes:
+      - ./app:/var/www/html/:ro
+      - ./.docker-mate/docker/web/:/etc/nginx/:ro
+      - phpmyadmin_data:/usr/share/phpmyadmin/:ro
+    environment:
+      - VIRTUAL_HOST=$PROJECT_NAME.docker, *.$PROJECT_NAME.docker $ADDITIONAL_DOMAIN_VHOST
+      - CERT_NAME=$CERT_NAME
+
+  #######################################
+  # Database
+  #######################################
+  db:
+    image: mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_USER=$DB_USER
+      - MYSQL_PASSWORD=$DB_PASSWORD
+
+  #######################################
+  # phpMyAdmin
+  #######################################
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:fpm-alpine
+    depends_on:
+      - db
+    links:
+      - db
+    volumes:
+      - phpmyadmin_data:/var/www/html/
+    environment:
+      - PMA_ABSOLUTE_URI=https://phpmyadmin.$PROJECT_NAME.docker/
+      - PMA_ARBITRARY=1
+      - PMA_HOST=$DB_HOST
+      - PMA_PORT=3306
+      - PMA_USER=$DB_USER
+      - PMA_PASSWORD=$DB_PASSWORD
+      - UPLOAD_LIMIT=128M
+
+  #######################################
+  # Mailhog
+  #######################################
+  mail:
+    image: mailhog/mailhog:latest
+    environment:
+      - CERT_NAME=$CERT_NAME
+      - VIRTUAL_PORT=8025
+      - VIRTUAL_HOST=mail.$PROJECT_NAME.docker
+
+volumes:
+  mariadb_data:
+  phpmyadmin_data:

@@ -1,0 +1,2 @@
+# Convert to LF line endings on checkout.
+* text eol=lf

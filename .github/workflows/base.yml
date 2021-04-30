@@ -1,0 +1,168 @@
+name: Test systems
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  COMPOSE_INTERACTIVE_NO_CLI: 1
+  NEW_PROJECT_NAME: example
+  NEW_PROJECT_GIT: n
+
+
+jobs:
+  custom:
+    env:
+      NEW_PROJECT_TYPE: custom
+    runs-on: [ ubuntu-20.04 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install mkcert
+        run: |
+          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
+          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          make cert-install
+      - name: Start init for complete setup
+        run: |
+          make init
+      - name: Test setup
+        run: |
+          sleep 5
+          echo '<?php phpinfo();' > app/web/index.php
+          chmod -R 777 .
+          curl -s -L -N https://example.docker --verbose --resolve example.docker:443:127.0.0.1 | grep -q 'PHP API'
+          curl -s -L -N https://example.docker --verbose --resolve example.docker:443:127.0.0.1 | grep -qv 'xdebug.idekey'
+          curl -s -L -N https://example.docker --verbose --resolve example.docker:443:127.0.0.1 -b XDEBUG_SESSION=PHPSTORM | grep -q 'xdebug.idekey'
+          curl -s -L -N https://phpmyadmin.example.docker --verbose --resolve phpmyadmin.example.docker:443:127.0.0.1 | grep -q 'phpMyAdmin'
+          curl -s -L -N https://mail.example.docker --verbose --resolve mail.example.docker:443:127.0.0.1 | grep -q 'MailHog'
+
+  wordpress:
+    env:
+      NEW_PROJECT_TYPE: wordpress
+    runs-on: [ ubuntu-20.04 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install mkcert
+        run: |
+          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
+          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          make cert-install
+      - name: Start init for complete setup
+        run: |
+          make init
+      - name: Test setup
+        run: |
+          chmod -R 777 .
+          sleep 5
+          curl -s -L -N https://example.docker --verbose --resolve example.docker:443:127.0.0.1 | grep -q 'WordPress'
+          curl -s -L -N https://phpmyadmin.example.docker --verbose --resolve phpmyadmin.example.docker:443:127.0.0.1 | grep -q 'phpMyAdmin'
+          curl -s -L -N https://mail.example.docker --verbose --resolve mail.example.docker:443:127.0.0.1 | grep -q 'MailHog'
+
+  grav:
+    env:
+      NEW_PROJECT_TYPE: grav
+    runs-on: [ ubuntu-20.04 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install mkcert
+        run: |
+          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
+          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          make cert-install
+      - name: Start init for complete setup
+        run: |
+          make init
+      - name: Add user
+        run: |
+          sleep 5
+          chmod -R 777 .
+          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          php bin/plugin login new-user \
+            -u demo \
+            -p Demo1234 \
+            -e demo@example.com \
+            -P b \
+            -N FullName
+      - name: Test setup
+        run: |
+          chmod -R 777 .
+          curl -s -L -N https://example.docker/ --verbose --resolve example.docker:443:127.0.0.1 | grep -q 'Say Hello to Grav'
+          curl -s -L -N https://mail.example.docker --resolve mail.example.docker:443:127.0.0.1 | grep -q 'MailHog'
+
+  shopware5:
+    env:
+      NEW_PROJECT_TYPE: shopware5
+    runs-on: [ ubuntu-20.04 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install mkcert
+        run: |
+          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
+          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          make cert-install
+      - name: Start init for complete setup
+        run: |
+          make init
+      - name: Install web
+        run: |
+          sleep 5
+          chmod -R 777 .
+          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          php recovery/install/index.php \
+            --db-host="db" \
+            --db-user="db" \
+            --db-password="password" \
+            --db-name="db" \
+            --shop-host="example.docker" \
+            --shop-locale de_DE \
+            --shop-name Example \
+            --shop-email example@example.com \
+            --shop-currency EUR \
+            --skip-admin-creation \
+            -n
+      - name: Test setup
+        run: |
+          chmod -R 777 .
+          sleep 5
+          curl -s -L -N https://example.docker/ --verbose --resolve example.docker:443:127.0.0.1 | grep -q 'Shopware'
+          curl -s -L -N https://mail.example.docker --resolve mail.example.docker:443:127.0.0.1 | grep -q 'MailHog'
+
+  shopware-plattform:
+    env:
+      NEW_PROJECT_TYPE: shopware-plattform
+    runs-on: [ ubuntu-20.04 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install mkcert
+        run: |
+          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
+          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          make cert-install
+      - name: Start init for complete setup
+        run: |
+          make init
+      - name: Install web
+        run: |
+          sleep 5
+          chmod -R 777 .
+          docker exec -w /var/www/html/public --user 1001 docker-mate_app_1 \
+          php recovery/install/index.php \
+            --db-host="db" \
+            --db-user="db" \
+            --db-password="password" \
+            --db-name="db" \
+            --shop-host="example.docker" \
+            --shop-locale de-DE \
+            --shop-name Example \
+            --shop-email example@example.com \
+            --shop-currency EUR \
+            --skip-admin-creation \
+            -n
+      - name: Test setup
+        run: |
+          chmod -R 777 .
+          sleep 5
+          curl -s -L -N https://example.docker/ --verbose --resolve example.docker:443:127.0.0.1 | grep -q 'Shopware'
+          curl -s -L -N https://mail.example.docker --resolve mail.example.docker:443:127.0.0.1 | grep -q 'MailHog'

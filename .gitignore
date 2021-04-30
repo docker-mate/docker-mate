@@ -1,0 +1,8 @@
+/app/
+/backup/
+/.env
+
+.docker-mate/docker/app/.env
+.docker-mate/docker/app/app.sh
+.docker-mate/docker/web/site.conf
+.mysql
