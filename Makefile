@@ -43,7 +43,7 @@ _setup: # Setup project
 _phpini: # Write php.ini in container
 	rm -f .docker-mate/docker/app/.env
 	if [ -f ".docker-mate/systems/${PROJECT_TYPE}/.env.phpini" ]; then cat .docker-mate/systems/${PROJECT_TYPE}/.env.phpini > .docker-mate/docker/app/.env; fi
-	if [ -f "./app/.docker-mate/env" ]; then cat ./app/.docker-mate/env  >> .docker-mate/docker/app/.env; fi
+	if [ -f "./app/.docker-mate/.env" ]; then cat ./app/.docker-mate/.env  >> .docker-mate/docker/app/.env; fi
 	cat ./.env  >> .docker-mate/docker/app/.env
 
 _config: # Write nginx config/vhost
