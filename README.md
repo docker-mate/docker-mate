@@ -31,7 +31,7 @@ Please take a look into documentation.
 1. `git clone https://github.com/docker-mate/docker-mate.git your-project`
 1. `cd your-project`
 1. Run `make up` and follow the instructions
-1. Adjust your projects name (use [kebap-case](https://stackoverflow.com/questions/11273282/whats-the-name-for-hyphen-separated-case/12273101#12273101) as this is also used for your local development domain)
+1. Adjust your projects name (use [kebab-case](https://stackoverflow.com/questions/11273282/whats-the-name-for-hyphen-separated-case/12273101#12273101) as this is also used for your local development domain)
 1. Your new project should start and you should be greeted with the local URLs where you can access it
 1. clone/put what-ever in app and app/web is document root
 
