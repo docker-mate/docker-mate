@@ -88,17 +88,17 @@ up: ## Start docker project or initialize
 	bash .docker-mate/utils/message.sh info "Starting your project..."
 	make check-proxy
 	make _phpini
-	docker-compose up -d
+	docker compose up -d
 	make urls
 
 stop: ## Stop docker project
 	bash .docker-mate/utils/message.sh info "Stopping your project..."
-	docker-compose stop
+	docker compose stop
 
 upgrade: ## Upgrade docker containers
 	bash .docker-mate/utils/message.sh info "Upgrading your project..."
 	make _config
-	docker-compose build --pull
+	docker compose build --pull
 	make up
 
 restart: ## Restart docker containers (stop & start)
@@ -108,27 +108,27 @@ restart: ## Restart docker containers (stop & start)
 destroy: ## Destroy containers/volumes (keep app folder)
 	make stop
 	bash .docker-mate/utils/message.sh info "Deleting all containers..."
-	docker-compose down --rmi all --remove-orphans
+	docker compose down --rmi all --remove-orphans
 
 rebuild: ## Rebuild docker container (destroy & upgrade)
 	make destroy
 	make upgrade
 
 state: ## Show docker status
-	docker-compose ps
+	docker compose ps
 
 logs: ## Show docker logs
-	docker-compose logs -f --tail=50 $(ARGS)
+	docker compose logs -f --tail=50 $(ARGS)
 
 ##:##########################
 # Container access: ##
 #############################
 
 ssh: ## SSH access to a specified container (sh)
-	docker-compose exec $(ARGS) sh
+	docker compose exec $(ARGS) sh
 
 ssh-app: ## SSH access to app container (bash)
-	docker-compose exec -u application app bash
+	docker compose exec -u application app bash
 
 
 ##:##########################

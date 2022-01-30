@@ -5,4 +5,4 @@ WEB_ROOT=/var/www/html
 #############################
 
 console: ## Shopware CLI
-	docker-compose exec -u application -w ${WEB_ROOT} app bin/console $(ARGS)
+	docker compose exec -u application -w ${WEB_ROOT} app bin/console $(ARGS)
