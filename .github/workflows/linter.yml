@@ -26,3 +26,6 @@ jobs:
           VALIDATE_ENV: false
           LOG_LEVEL: NOTICE
           VALIDATE_MARKDOWN: false
+          # Duplicates are in workflows
+          VALIDATE_JSCPD: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

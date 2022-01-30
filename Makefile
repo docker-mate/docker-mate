@@ -7,8 +7,8 @@ MAKEFLAGS += --silent
 #############################
 # Environment
 #############################
--include app/.docker-mate/.env
 -include .env
+-include app/.docker-mate/.env
 
 COMPOSE_FILE=docker-compose.yml${COMPOSE_FILE_PROJECT}${COMPOSE_FILE_LOCAL}
 export
@@ -41,10 +41,9 @@ _setup: # Setup project
 	[ -d "app" ] && bash .docker-mate/utils/init-git.sh
 
 _phpini: # Write php.ini in container
-	rm -f .docker-mate/docker/app/.env
-	if [ -f ".docker-mate/systems/${PROJECT_TYPE}/.env.phpini" ]; then cat .docker-mate/systems/${PROJECT_TYPE}/.env.phpini > .docker-mate/docker/app/.env; fi
+	cat ./.env  > .docker-mate/docker/app/.env
+	if [ -f ".docker-mate/systems/${PROJECT_TYPE}/.env.phpini" ]; then cat .docker-mate/systems/${PROJECT_TYPE}/.env.phpini >> .docker-mate/docker/app/.env; fi
 	if [ -f "./app/.docker-mate/.env" ]; then cat ./app/.docker-mate/.env  >> .docker-mate/docker/app/.env; fi
-	cat ./.env  >> .docker-mate/docker/app/.env
 
 _config: # Write nginx config/vhost
 	ln -f .docker-mate/systems/${PROJECT_TYPE}/app.sh .docker-mate/docker/app/
@@ -88,17 +87,17 @@ up: ## Start docker project or initialize
 	bash .docker-mate/utils/message.sh info "Starting your project..."
 	make check-proxy
 	make _phpini
-	docker-compose up -d
+	docker compose up -d
 	make urls
 
 stop: ## Stop docker project
 	bash .docker-mate/utils/message.sh info "Stopping your project..."
-	docker-compose stop
+	docker compose stop
 
 upgrade: ## Upgrade docker containers
 	bash .docker-mate/utils/message.sh info "Upgrading your project..."
 	make _config
-	docker-compose build --pull
+	docker compose build --pull
 	make up
 
 restart: ## Restart docker containers (stop & start)
@@ -108,27 +107,31 @@ restart: ## Restart docker containers (stop & start)
 destroy: ## Destroy containers/volumes (keep app folder)
 	make stop
 	bash .docker-mate/utils/message.sh info "Deleting all containers..."
-	docker-compose down --rmi all --remove-orphans
+	docker compose down --rmi all --remove-orphans || docker compose down --rmi all --remove-orphans
+
+destroy-all: ## Destroy + remove volumes
+	make destroy
+	docker compose down -v
 
 rebuild: ## Rebuild docker container (destroy & upgrade)
 	make destroy
 	make upgrade
 
 state: ## Show docker status
-	docker-compose ps
+	docker compose ps
 
 logs: ## Show docker logs
-	docker-compose logs -f --tail=50 $(ARGS)
+	docker compose logs -f --tail=50 $(ARGS)
 
 ##:##########################
 # Container access: ##
 #############################
 
 ssh: ## SSH access to a specified container (sh)
-	docker-compose exec $(ARGS) sh
+	docker compose exec $(ARGS) sh
 
 ssh-app: ## SSH access to app container (bash)
-	docker-compose exec -u application app bash
+	docker compose exec -u application app bash
 
 
 ##:##########################
@@ -140,6 +143,14 @@ mysql-backup: ## Backup MySQL Database into backup folder
 
 mysql-restore: ## Restore MySQL Database from backup folder
 	bash .docker-mate/utils/mysql-restore.sh
+
+##:##########################
+# Utility: ##
+#############################
+
+copy-env-to-local: ## Add current env to project repo
+	mkdir -p app/.docker-mate
+	cp .env app/.docker-mate
 
 ##:##########################
 # Info: ##

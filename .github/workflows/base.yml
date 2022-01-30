@@ -19,6 +19,11 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v3
+      - name: Install docker compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
       - name: Install mkcert
         run: |
           sudo apt install libnss3-tools
@@ -46,6 +51,11 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v3
+      - name: Install docker compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
       - name: Install mkcert
         run: |
           sudo apt install libnss3-tools
@@ -70,6 +80,11 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v3
+      - name: Install docker compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
       - name: Install mkcert
         run: |
           sudo apt install libnss3-tools
@@ -84,7 +99,7 @@ jobs:
         run: |
           sleep 5
           chmod -R 777 .
-          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          docker exec -w /var/www/html/web --user 1001 docker-mate-app-1 \
           php bin/plugin login new-user \
             -u demo \
             -p Demo1234 \
@@ -105,6 +120,11 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v3
+      - name: Install docker compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
       - name: Install mkcert
         run: |
           sudo apt install libnss3-tools
@@ -114,16 +134,19 @@ jobs:
           make cert-install
       - name: Start init for complete setup
         run: |
+          echo "" > .docker-mate/systems/shopware5/.env.phpini
           make init
       - name: Install web
         run: |
           sleep 5
           chmod -R 777 .
-          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          docker exec -w /var/www/html/web --user 1001 docker-mate-app-1 \
           bash -c 'echo " " >> .env'
-          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          docker exec -w /var/www/html/web --user 1001 docker-mate-app-1 \
           bash -c 'echo "DROP_DATABASE=y" >> .env'
-          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          docker exec -w /var/www/html/web --user 1001 docker-mate-app-1 \
+          bash -c 'echo "INSTALL_IMAGES=n" >> .env'
+          docker exec -w /var/www/html/web --user 1001 docker-mate-app-1 \
           ./app/bin/install.sh
       - name: Test setup
         run: |
@@ -138,6 +161,11 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v3
+      - name: Install docker compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
       - name: Install mkcert
         run: |
           sudo apt install libnss3-tools
@@ -152,7 +180,7 @@ jobs:
         run: |
           sleep 5
           chmod -R 777 .
-          docker exec -w /var/www/html --user 1001 docker-mate_app_1 \
+          docker exec -w /var/www/html --user 1001 docker-mate-app-1 \
           php bin/console system:install --basic-setup
       - name: Test setup
         run: |

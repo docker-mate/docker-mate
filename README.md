@@ -18,7 +18,7 @@ Please take a look into documentation.
 ## Quick overview
 
 ### Linux
-- `docker` & `docker-compose`
+- `docker` & `docker-compose` (Compose is a plugin for docker)
 - Configure your system to resolve `.docker` domains to `127.0.0.1` e.g. with dnsmasq
 
 ### macOS
