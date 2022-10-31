@@ -16,13 +16,15 @@ jobs:
   custom:
     env:
       NEW_PROJECT_TYPE: custom
-    runs-on: [ ubuntu-20.04 ]
+    runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install mkcert
         run: |
-          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
-          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          sudo apt install libnss3-tools
+          curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+          chmod +x mkcert-v*-linux-amd64
+          sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
           make cert-install
       - name: Start init for complete setup
         run: |
@@ -41,13 +43,15 @@ jobs:
   wordpress:
     env:
       NEW_PROJECT_TYPE: wordpress
-    runs-on: [ ubuntu-20.04 ]
+    runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install mkcert
         run: |
-          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
-          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          sudo apt install libnss3-tools
+          curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+          chmod +x mkcert-v*-linux-amd64
+          sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
           make cert-install
       - name: Start init for complete setup
         run: |
@@ -63,13 +67,15 @@ jobs:
   grav:
     env:
       NEW_PROJECT_TYPE: grav
-    runs-on: [ ubuntu-20.04 ]
+    runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install mkcert
         run: |
-          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
-          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          sudo apt install libnss3-tools
+          curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+          chmod +x mkcert-v*-linux-amd64
+          sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
           make cert-install
       - name: Start init for complete setup
         run: |
@@ -94,13 +100,15 @@ jobs:
   shopware5:
     env:
       NEW_PROJECT_TYPE: shopware5
-    runs-on: [ ubuntu-20.04 ]
+    runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install mkcert
         run: |
-          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
-          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          sudo apt install libnss3-tools
+          curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+          chmod +x mkcert-v*-linux-amd64
+          sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
           make cert-install
       - name: Start init for complete setup
         run: |
@@ -132,13 +140,15 @@ jobs:
   shopware-plattform:
     env:
       NEW_PROJECT_TYPE: shopware-plattform
-    runs-on: [ ubuntu-20.04 ]
+    runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install mkcert
         run: |
-          wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -O /home/linuxbrew/.linuxbrew/bin/mkcert
-          chmod +x /home/linuxbrew/.linuxbrew/bin/mkcert
+          sudo apt install libnss3-tools
+          curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+          chmod +x mkcert-v*-linux-amd64
+          sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
           make cert-install
       - name: Start init for complete setup
         run: |
