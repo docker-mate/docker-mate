@@ -4,7 +4,7 @@
 Please check if your contributions fall under the following requirements
 ::
 
-Follow the editorconfig or use an editor/IDE with support to match the indents, newline at the end and other formation.
+Follow the `.editorconfig` or use an editor/IDE with support to match the indents, newline at the end and other formation.
 
 ## New Systems
 
