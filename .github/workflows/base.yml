@@ -120,18 +120,11 @@ jobs:
           sleep 5
           chmod -R 777 .
           docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
-          php recovery/install/index.php \
-            --db-host="db" \
-            --db-user="db" \
-            --db-password="password" \
-            --db-name="db" \
-            --shop-host="example.docker" \
-            --shop-locale de_DE \
-            --shop-name Example \
-            --shop-email example@example.com \
-            --shop-currency EUR \
-            --skip-admin-creation \
-            -n
+          bash -c 'echo " " >> .env'
+          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          bash -c 'echo "DROP_DATABASE=y" >> .env'
+          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          ./app/bin/install.sh
       - name: Test setup
         run: |
           chmod -R 777 .
