@@ -90,6 +90,7 @@ jobs:
             -p Demo1234 \
             -e demo@example.com \
             -t Demouser \
+            -l en \
             -P b \
             -N FullName
       - name: Test setup
