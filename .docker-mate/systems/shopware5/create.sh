@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-mkdir -p app/web
+composer create-project shopware/composer-project app/web --stability=dev --no-interaction
+
 cd app/web || exit
-
-curl -iL -o shopware.zip "$(curl -s https://www.shopware.com/en/download/ | grep -ioEm 1 "https:\/\/www\.shopware\.com\/en\/Download\/redirect\/version\/sw5\/file\/install_5\.[0-9]\.[0-9]{1,2}_[0-9a-f]{40}\.zip")"
-
-unzip shopware.zip
-rm shopware.zip
+cp .env.example .env
+sed -i -e "s%composer.test/path%${PROJECT_NAME}.docker%g" .env
+sed -i -e "s%DATABASE_URL=.*%DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_NAME}%g" .env

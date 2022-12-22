@@ -90,6 +90,7 @@ jobs:
             -p Demo1234 \
             -e demo@example.com \
             -t Demouser \
+            -l en \
             -P b \
             -N FullName
       - name: Test setup
@@ -119,18 +120,11 @@ jobs:
           sleep 5
           chmod -R 777 .
           docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
-          php recovery/install/index.php \
-            --db-host="db" \
-            --db-user="db" \
-            --db-password="password" \
-            --db-name="db" \
-            --shop-host="example.docker" \
-            --shop-locale de_DE \
-            --shop-name Example \
-            --shop-email example@example.com \
-            --shop-currency EUR \
-            --skip-admin-creation \
-            -n
+          bash -c 'echo " " >> .env'
+          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          bash -c 'echo "DROP_DATABASE=y" >> .env'
+          docker exec -w /var/www/html/web --user 1001 docker-mate_app_1 \
+          ./app/bin/install.sh
       - name: Test setup
         run: |
           chmod -R 777 .
@@ -158,19 +152,8 @@ jobs:
         run: |
           sleep 5
           chmod -R 777 .
-          docker exec -w /var/www/html/public --user 1001 docker-mate_app_1 \
-          php recovery/install/index.php \
-            --db-host="db" \
-            --db-user="db" \
-            --db-password="password" \
-            --db-name="db" \
-            --shop-host="example.docker" \
-            --shop-locale de-DE \
-            --shop-name Example \
-            --shop-email example@example.com \
-            --shop-currency EUR \
-            --skip-admin-creation \
-            -n
+          docker exec -w /var/www/html --user 1001 docker-mate_app_1 \
+          php bin/console system:install --basic-setup
       - name: Test setup
         run: |
           chmod -R 777 .

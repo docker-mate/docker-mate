@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-mkdir -p app
+composer create-project shopware/production:dev-flex app --no-interaction
 
 cd app || exit
-
-curl -iL -o shopware.zip "$(curl -s https://www.shopware.com/en/download/ | grep -ioEm 1 "https:\/\/www\.shopware\.com\/en\/Download\/redirect\/version\/sw6\/file\/install_v?6\.[0-9\.]+\_[0-9a-f]+\.zip")"
-
-unzip shopware.zip
-rm shopware.zip
+sed -i -e "s%APP_URL=.*%APP_URL=https://${PROJECT_NAME}.docker%g" .env
+sed -i -e "s%STOREFRONT_PROXY_URL=.*%STOREFRONT_PROXY_URL=https://${PROJECT_NAME}.docker%g" .env
+sed -i -e "s%DATABASE_URL=.*%DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_NAME}%g" .env
