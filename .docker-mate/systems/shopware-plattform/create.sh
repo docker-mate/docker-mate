@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-composer create-project shopware/production:dev-flex app --no-interaction
+composer create-project shopware/production app --no-interaction
 
 cd app || exit
 sed -i -e "s%APP_URL=.*%APP_URL=https://${PROJECT_NAME}.docker%g" .env
