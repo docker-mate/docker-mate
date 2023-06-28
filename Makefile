@@ -142,7 +142,7 @@ mysql-backup: ## Backup MySQL Database into backup folder
 	bash .docker-mate/utils/mysql-backup.sh
 
 mysql-restore: ## Restore MySQL Database from backup folder
-	bash .docker-mate/utils/mysql-restore.sh
+	bash .docker-mate/utils/mysql-restore.sh $(ARGS)
 
 ##:##########################
 # Utility: ##

@@ -22,6 +22,6 @@ fi
 if [[ "${backupOK,,}" == "yes" ]] || [[ "${backupOK,,}" == "y" ]]; then
     bash .docker-mate/utils/message.sh info "Creating a backup of your database in backup/mysql.sql.gz"
     mkdir -p backup
-    docker compose exec db mysqldump -u "${DB_USER}" -p"${DB_PASSWORD}" "${DB_NAME}" | gzip >"backup/mysql.sql.gz"
+    docker compose exec db mariadb-dump -u "${DB_USER}" -p"${DB_PASSWORD}" "${DB_NAME}" | gzip >"backup/mysql.sql.gz"
     bash .docker-mate/utils/message.sh success "Backup successful!"
 fi
