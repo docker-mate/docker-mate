@@ -1,6 +1,9 @@
 # Docker Mate
 ## For local PHP based project development
 
+> [!IMPORTANT]
+> `next` will work with same structure, but may have some breaking changes in config or untested under non linux system.
+
 Easy-to-use [Docker](https://www.docker.com/) setup for local development by [Docker Mate](https://github.com/docker-mate/docker-mate).
 
 *please note that this is intended for local development - deploying it to production is probably a bad idea*
